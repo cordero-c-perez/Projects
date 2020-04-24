@@ -5,14 +5,14 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "0",
+    "hash" : "3213079297",
     "id" : "80E04B8",
-    "lastKnownWriteTime" : 1587693846,
-    "last_content_update" : 1587693846585,
+    "lastKnownWriteTime" : 1587695415,
+    "last_content_update" : 1587695415432,
     "path" : "~/Documents/R/RProjects-Public/Time-Series-Analysis/tsa_main.r",
     "project_path" : "tsa_main.r",
     "properties" : {
-        "cursorPosition" : "7,18",
+        "cursorPosition" : "0,2",
         "scrollLine" : "0"
     },
     "read_only" : false,
