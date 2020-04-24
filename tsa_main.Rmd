@@ -1,7 +1,7 @@
 ---
 title: <center>Time Series Analysis of Ridership</center>
 author: <center>C. Perez</center>
-output: html_document
+output: rmarkdown::github_document
 ---
 
 ```{r setup, include=FALSE}
