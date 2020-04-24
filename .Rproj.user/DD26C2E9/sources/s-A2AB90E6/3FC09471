@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1587693782560.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3097947055",
+    "id" : "3FC09471",
+    "lastKnownWriteTime" : 1587693904,
+    "last_content_update" : 1587693904284,
+    "path" : "~/Documents/R/RProjects-Public/Time-Series-Analysis/tsa_main.Rmd",
+    "project_path" : "tsa_main.Rmd",
+    "properties" : {
+        "cursorPosition" : "48,70",
+        "scrollLine" : "26",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
