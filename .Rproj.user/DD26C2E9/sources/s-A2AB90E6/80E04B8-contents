@@ -45,7 +45,7 @@ plot(tsdecomp)
 # trend data as it shows a a decline in trips starting in 2012
 plot(tsdecomp$trend, main = str_to_title("isolated trend of time series data"),
      xlab = str_to_title("months 2010:2017"),
-     ylab = str_to_title("trend values across trip data"))
+     ylab = str_to_title("trend"))
 abline(h = 15062412, lty = 2, col = "magenta") #intersection of downward trend
 abline(v = 2012+(2/12), lty = 2, col = "magenta")#intersection "              "
 
@@ -63,7 +63,7 @@ lines(tsdata_original)
 
 # plot forecast
 plot(trip_data_forecast$fitted, col = "red", main = str_to_title("model vs. original time series"),
-     ylab = str_to_title("transformed values"))
+     ylab = str_to_title("ridership"))
 lines(tsdata)
 legend(2016, 1.6e+07, legend=c("Model", "Original"),
        col=c("red", "black"), lty = 1:1)
