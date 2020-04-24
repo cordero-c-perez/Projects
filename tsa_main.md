@@ -266,14 +266,14 @@ generated:  
 </center>
 
    
-The following graphs show the the predictions (forecasts) for the year
-2018, and the model as it compares to the original time series,
-respectively. It is important to note that as time increases the fit and
-accuracy increases which is important for this analyis specifically as
-the concern here is accuracy in predicting future values. Should the
-time series plot hint at cycles (crudely, repeated values across larger
-gaps in time) then it might be best to secure a better fit for earlier
-values of the time series object.
+The following graphs show the predictions (forecasts) for the year 2018,
+and the model as it compares to the original time series, respectively.
+It is important to note that as time increases the fit and accuracy
+increases which is important for this analysis specifically as the
+concern here is accuracy in predicting future values. Should the time
+series plot hint at cycles (crudely, repeated values across larger gaps
+in time) then it might be best to secure a better fit for earlier values
+of the time series object.
  
 
 <img src="tsa_main_files/figure-gfm/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /><img src="tsa_main_files/figure-gfm/unnamed-chunk-8-2.png" style="display: block; margin: auto;" />
@@ -318,10 +318,10 @@ The real confirmation on the quality of the model comes from tesing the
 residuals. A fundamental idea behind TSA is that we have a time series
 object with one component, that being random variation or “white noise”,
 that we cannot predict or replicate in our models. This component serves
-as irreducible error from a statistical learning perspective, and as
-such the residuals (differences between the model and original series)
-should essentially be white noise if the model is “good”. Basically, if
-all components present were accounted for, testing the residuals should
+as irreducible error from a statistical learning perspective, as such
+the residuals (differences between the model and original series) should
+essentially be white noise if the model is “good”. Basically, if all
+components present were accounted for, testing the residuals should
 produce the same diagnositcs as testing white noise. The following
 results show the output of the residuals testing and the conclusion
 wraps up the results of the
@@ -338,9 +338,9 @@ are independently distributed, essentially exhibiting no correlation.
 The density curve and histogram demonstrate the distribution of the
 residuals are roughly normal. The ACF maintains markers within the
 confidence region and the QQ plot of residuals vs. white noise confirms
-the notion they are of the same distribution as the the scatter plot
-markers fall along the straight line. All of these results confirm the
-residuals are essentially white noise and the model is a good fit.
+the notion they are of the same distribution as the scatter plot markers
+fall along the straight line. All of these results confirm the residuals
+are essentially white noise and the model is a good fit.
 
 Because the model is very accurate (produced good predictions for 2018
 ridership), and the residulas testing confirmed them to be white noise,
