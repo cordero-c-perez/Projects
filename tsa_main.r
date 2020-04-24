@@ -91,9 +91,13 @@ legend(8, 9400000, legend=c("Projected", "Actual"),
 # residuals testing
 par(mfrow = c(3,1))
 qqnorm(trip_data_model$residuals, frame = FALSE)
+qqnorm(trip_data_model$residuals, frame = FALSE)
 qqline(trip_data_model$residuals)
-acf(trip_data_model$residuals, main = "Residuals: ACF Look")
 pacf(trip_data_model$residuals, main = "Residuals: PACF Look",lag.max = 20)
+
+
+# standard function for residuals testing
+(tsdiag(trip_data_model))
 
 
 # density check
@@ -101,3 +105,11 @@ par(mfrow = c(1,2))
 hist(trip_data_model$residuals, main = str_to_title("residual histogram"),
      xlab = "Spread")
 plot(density(trip_data_model$residuals), main = "Density Shape", frame = FALSE)
+
+
+
+
+
+
+
+

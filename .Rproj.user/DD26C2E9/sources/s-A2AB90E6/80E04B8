@@ -5,15 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3213079297",
+    "hash" : "0",
     "id" : "80E04B8",
-    "lastKnownWriteTime" : 1587695415,
-    "last_content_update" : 1587695415432,
+    "lastKnownWriteTime" : 1587760608,
+    "last_content_update" : 1587760608939,
     "path" : "~/Documents/R/RProjects-Public/Time-Series-Analysis/tsa_main.r",
     "project_path" : "tsa_main.r",
     "properties" : {
-        "cursorPosition" : "0,2",
-        "scrollLine" : "0"
+        "cursorPosition" : "86,0",
+        "scrollLine" : "69"
     },
     "read_only" : false,
     "read_only_alternatives" : [
