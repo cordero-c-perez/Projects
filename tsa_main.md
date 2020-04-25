@@ -281,8 +281,8 @@ of the time series object.
 
 The plot below shows a visual comparison for the predictions, and based
 on the visual inspection, the forecasted values are fairly accurate. The
-red line shows the original time series for 2018 (**test set**) while
-the black line shows the predictions (**forecasts**) for the same
+black line shows the original time series for 2018 (**test set**) while
+the red line shows the predictions (**forecasts**) for the same
 year.  
  
 
