@@ -1,0 +1,333 @@
+---
+title: <center>Time Series Analysis of Ridership</center>
+author: <center>C. Perez</center>
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r, include = FALSE, echo = FALSE}
+
+# Times-Seris-Analysis - ARIMA Model
+
+rm(list = ls(all.names = TRUE)) # clear global environment
+
+par(mfrow = c(1,1)) # reset image window for basic plotting
+
+# libraries
+library(tidyverse)
+library(TSA)
+library(gridExtra) 
+library(tseries)
+library(forecast)
+
+
+# load and convert data to a time series object
+tsdata_original <- read_csv("~/Documents/R/RProjects-Public/Time-Series-Analysis-Data/ts_data_freq_12-Table 1.csv", col_names = FALSE)
+tsdata_original <- tsdata_original$X1
+tsdata <- tsdata_original[13:108] #extract section 2010 through 2017
+tsdata <- ts(tsdata, frequency = 12, start = 2010) #assign years to 12 cycle structure
+
+
+# view the time series data for structure
+tsdata 
+
+# questionable points: 2/2010, 3/2010 ~ accuracy seems off
+
+# initial plot
+plot(tsdata, type = "l", main = str_to_title("time series plot of raw data"),
+     xlab = str_to_title("monthly 2010:2017"), 
+     ylab = str_to_title("total trips"))
+
+
+# key info: cycle = Freq = 12
+# boxplot construction to explore seasonal trend
+boxplot(tsdata ~ cycle(tsdata), main = str_to_title("seasonality of trip data by cycle"),
+        xlab = str_to_title("cycle summary 2010:2017"),
+        ylab = str_to_title("median across time"), col = "light blue")
+
+
+# decompose data: with the exception of the questionable points the seasonal variation looks constant
+tsdecomp <- decompose(tsdata, "multiplicative")
+plot(tsdecomp)
+
+
+# trend data as it shows a a decline in trips starting in 2012
+plot(tsdecomp$trend, main = str_to_title("isolated trend of time series data"),
+     xlab = str_to_title("months 2010:2017"),
+     ylab = str_to_title("trend"))
+abline(h = 15062412, lty = 2, col = "magenta") #intersection of downward trend
+abline(v = 2012+(2/12), lty = 2, col = "magenta")#intersection "              "
+
+
+# find a model - auto.arima updated December 2019 
+trip_data_model <- auto.arima(tsdata, trace = TRUE)
+trip_data_model
+
+
+# create a forecast
+trip_data_forecast <- forecast(trip_data_model, level = c(95), h = 12)
+plot(trip_data_forecast, ylab = str_to_title("ridership"))
+lines(tsdata_original)
+
+
+# plot forecast
+plot(trip_data_forecast$fitted, col = "red", main = str_to_title("model vs. original time series"),
+     ylab = str_to_title("ridership"))
+lines(tsdata)
+legend(2016, 1.6e+07, legend=c("Model", "Original"),
+       col=c("red", "black"), lty = 1:1)
+
+
+
+# accuracy check
+accuracy(trip_data_forecast, tsdata_original[109:120])
+
+
+# compare forecast
+predicted_2018_df <- as.data.frame(trip_data_forecast)
+predicted_points_2018 <- predicted_2018_df$`Point Forecast`
+actual_2018 <- tsdata_original[109:120]
+plot(actual_2018, lty = 1, main = str_to_title("projected values vs. actual values"))
+lines(actual_2018)
+lines(predicted_points_2018, col = "red")
+legend(8, 9400000, legend=c("Projected", "Actual"),
+       col=c("red", "black"), lty = 1:1)
+
+
+#Section 2----Residual Testing
+
+
+# residuals testing
+par(mfrow = c(3,1))
+qqnorm(trip_data_model$residuals, frame = FALSE)
+qqline(trip_data_model$residuals)
+acf(trip_data_model$residuals, main = "Residuals: ACF Look")
+pacf(trip_data_model$residuals, main = "Residuals: PACF Look",lag.max = 20)
+
+
+# standard function for residuals testing
+(tsdiag(trip_data_model))
+
+
+# density check
+par(mfrow = c(1,2))
+hist(trip_data_model$residuals, main = str_to_title("residual histogram"),
+     xlab = "Spread")
+plot(density(trip_data_model$residuals), main = "Density Shape", frame = FALSE)
+
+```
+&nbsp;  
+
+## Motivation  
+
+New York City (NYC) Taxi Medallions are physical tins verifying the owner’s legal right to operate a taxicab within NYC. Due to the restricted supply of these medallions, by consequence of legislation, these tins were considered "ever increasing" assets in which the value is directly correlated to the profitability of the taxicab itself, or at least in theory it should be, and ridership is a key factor in profitability. Seeing as financing a medallion eventually became comparable to purchasing a home in NYC, it would make sense that significant metrics such as ridership would be evaluated when negotiating loan amounts. Furthermore, as ridership changes, it would make sense that this metric would affect the borrower's eligibility to refinance as well.  
+
+Whether or not entities that back these loans take ridership into account is completely up to the financing institution, however the question still remains; **if ridership is considered a significant metric, how can we succesfully predict what ridership would be in the future given the data we have today?** Also, **How efficient is an ARIMA model at forecasting ridership in this scenario?**  
+
+To answer these questions, I have decided to explore how effective TSA would be in creating a model and using that model to predict future values of ridership. It is typical when building a model to break up the data into a training set, a tuning set, and a test set. For TSA, the data can be split into two sets, a training set and a test set, as tuning is generally handled when finding appropriate parameters for the "best" model. Luckily, the capabilities of R limit the amount of exploratory data analysis required when finding "good" parameters, and therefore eases the necessity to tune as the best model is generated and selected based on widely accepted criterion **(deeper dive to follow)**.  
+&nbsp;  
+
+## Data  
+
+Monthly ridership data used for this analysis is publicly available and can be found [here](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page).  
+&nbsp;  
+
+## Methodology 
+
+1. Download all individual monthly data files for 2010 through 2018 and read them into R.  
+2. Count the quantity of trips per month and save each count to a vector in chronological order.
+3. Export and save this vector to import for the Time Series Analysis. 
+4. Conduct the Time Series Analysis
+    + Exploratory Data Analysis (EDA)
+    + Model Generating
+    + Model Testing
+    + Residuals EDA and Testing
+&nbsp;  
+
+## Analysis  
+<center> **Exploratory Data Analysis** </center>
+&nbsp;  
+
+
+Importing the vector and creating a time series object yields the following structure:  
+&nbsp;  
+
+
+```{r, include = TRUE, echo = FALSE, fig.align= 'center', comment = ""}
+tsdata
+```
+&nbsp;  
+
+The plot below shows ridership data, aggregated monthly from January 2010 through December 2017, plotted as a time series object. Data for 2018 has been set aside as the test set for evaluting the model. Traditionally, examining the ACF and PACF yields insight into the "best" parameters (p, d, q, etc.) for an ARIMA model; however, the R **auto.arima** function applies necessary techniques to achieve stationarity, if necessary, prior to finding appropriate parameters for the "best" model.  
+&nbsp;
+
+```{r, include = TRUE, echo = FALSE, fig.align= 'center'}
+
+plot(tsdata, type = "l", main = str_to_title("time series plot of raw data"),
+     xlab = str_to_title("monthly 2010:2017"), 
+     ylab = str_to_title("total trips"))
+
+```
+&nbsp;  
+
+Although the function now makes it easier to identify a model, traditional methods in decomposition are still necessary in order to confirm trends identified within the exploratory data analysis phase. For example, the boxplot below was generated by cycle (month) across the eight years of data provided in the initial plot. When viewed by cycle, there is clearly a seasonal trend present which dips in warmer months and increases in cooler months or months that tend to have high precipitation. This makes sense seeing as people are probably more likely to walk to their destination or wait for public transportation in good weather.
+&nbsp;  
+
+```{r, include = TRUE, echo = FALSE, fig.align= 'center'}
+
+boxplot(tsdata ~ cycle(tsdata), main = str_to_title("seasonality of trip data by cycle"),
+        xlab = str_to_title("cycle summary 2010:2017"),
+        ylab = str_to_title("median across time"), col = "light blue")
+
+```
+&nbsp;  
+Some questions do arise from the initial plot and cycle boxplot; for example:
+
+1.	**Why is there a sharp increase in variance over the first few months and generally consistent thereafter?**
+2.	**Why does ridership dip in February when it is still fairly cold?**
+3.	**Does the initial variance, anomaly or not, warrant a multiplicative decomposition over an additive?**
+
+In reviewing the data to answer some of these questions, the ridership values in early 2010 do not seem to align with the general trend, specifically for the months of February and March. However, in testing replacement values that do align with the trend (**not recommended, purely out of curiosity**), the boxplot still displays a dip between cycles 1 and 3, indicating that the values are not outliers in that they do not change the seasonal pattern for these cycles and in fact do not change much about anything other than the visual variance on the initial plot. **In order to maintain data integrity, the original values were used** and a multiplicative decomposition was used as the gradual change in variance hints at a multiplicative decomposition for the model. This can be argued as the overall trend points more to an additive decomposition, nontheless multiplicative was used for this analysis.  
+
+There are also other explanations and/or assumptions that might explain dips and climbs such as February having less days than both surrounding months January and March. Under the assumption that trips are distributed evenly amongst days, and a difference of roughly 3 days, this would explain at least 10% of the February dip as it relates to neighboring months. Whatever the explanation may be, the important takeaway is that the data has a seasonal component and hence the ARIMA model generated should have a seasonal component as well.
+
+The decomposition provided below shows a seasonal pattern consistent with what was gleaned from the previous boxplot, and the decomposed trend confirms the general decreasing trend seen in the initial time series plot.  
+&nbsp; 
+```{r, include = TRUE, echo = FALSE, fig.align= 'center'}
+
+tsdecomp <- decompose(tsdata, "multiplicative")
+plot(tsdecomp)
+
+```
+&nbsp;
+
+The following plot explores the trend provided from the time series decomposition. Lines of intersection have been added to mark the point in time at which the trend begins consistently decreasing. 
+&nbsp;  
+```{r, include = TRUE, echo = FALSE, fig.align= 'center'}
+
+# trend data as it shows a a decline in trips starting in 2012
+plot(tsdecomp$trend, main = str_to_title("isolated trend of time series data"),
+     xlab = str_to_title("months 2010:2017"),
+     ylab = str_to_title("trend"))
+abline(h = 15062412, lty = 2, col = "magenta") #intersection of downward trend
+abline(v = 2012+(2/12), lty = 2, col = "magenta")#intersection "              "
+
+```
+&nbsp;  
+
+This point can be significant for many reasons. For example:  
+
+1. This point could mark the start of a planned fair increase which one would naturally expect a decrease in ridership to follow. 
+2. From a marketing perspective, this point could  mark the entrance of a new competitor in the market, or  
+3. From a financing perspective, **if ridership is used in some way as a lending metric tied to profitability**, then this point could mark the beginning of higher interest rates (as loans take on more risk with anticipated decline in revenue) or less options to refinance (as the asset value could decrease if profitability is expected to decrease).  
+
+Nonetheless, any explanation or siginficance tied to this point would have to be thoroughly researched and varies widely according to perspective. For the purpose of this analysis (TSA and forecasting) it  marks the start of the more consistent trend which hints at a model with a drift component. These hints are valuable in order to verify the generated model makes sense on a fundamental level.  
+&nbsp;
+&nbsp;  
+<center> **Model Generation** </center>
+&nbsp;  
+
+The following result shows the ARIMA models generated along with the criterion (AIC, AICc, and BIC) and identifies the best model among those generated: 
+&nbsp;  
+
+```{r, include = TRUE, echo = FALSE, fig.align= 'center', comment = ""}
+
+trip_data_model <- auto.arima(tsdata, trace = TRUE)
+trip_data_model
+
+```
+&nbsp;
+&nbsp;  
+
+
+<center> **Model Testing** </center>
+&nbsp;  
+The following graphs show the predictions (forecasts) for the year 2018, and the model as it compares to the original time series, respectively. It is important to note that as time increases the fit and accuracy increases which is important for this analysis specifically as the concern here is accuracy in predicting future values. Should the time series plot hint at cycles (crudely, repeated values across larger gaps in time) then it might be best to secure a better fit for earlier values of the time series object.
+&nbsp;  
+
+```{r, include = TRUE, echo = FALSE, fig.align= 'center'}
+
+# create a forecast
+trip_data_forecast <- forecast(trip_data_model, level = c(95), h = 12)
+plot(trip_data_forecast, ylab = str_to_title("ridership"))
+lines(tsdata_original)
+
+
+# plot forecast
+plot(trip_data_forecast$fitted, col = "red", main = str_to_title("model vs. original time series"),
+     ylab = str_to_title("ridership"))
+lines(tsdata)
+legend(2016, 1.6e+07, legend=c("Model", "Original"),
+       col=c("red", "black"), lty = 1:1)
+
+```
+&nbsp;   
+
+The plot below shows a visual comparison for the predictions, and based on the visual inspection, the forecasted values are fairly accurate. The black line shows the original time series for 2018 (**test set**) while the red line shows the predictions (**forecasts**) for the same year.  
+&nbsp;  
+
+```{r, include = TRUE, echo = FALSE, fig.align= 'center'}
+
+predicted_2018_df <- as.data.frame(trip_data_forecast)
+predicted_points_2018 <- predicted_2018_df$`Point Forecast`
+actual_2018 <- tsdata_original[109:120]
+plot(actual_2018, lty = 1, main = str_to_title("projected values vs. actual values"), 
+     ylab = "Ridership", xlab = "Months: 2018")
+lines(actual_2018)
+lines(predicted_points_2018, col = "red")
+legend(8, 9400000, legend=c("Projected", "Actual"),
+       col=c("red", "black"), lty = 1:1)
+
+```
+&nbsp;  
+
+The following table provides different numerical measures of accuracy, the most significant being the **Mean Absolute Percentage Error (MAPE)**, which measures the average positive differences between the forecast and the test set. As we can see below, the MAPE is incredibly small and confirms what was suspected visually, that this is in fact a good prediction.  
+&nbsp;
+&nbsp;  
+
+```{r, include = TRUE, echo = FALSE, fig.align= 'center', comment = ""}
+
+accuracy(trip_data_forecast, tsdata_original[109:120])
+
+```
+<center> **Residuals EDA & Testing** </center>
+&nbsp;  
+
+The real confirmation on the quality of the model comes from tesing the residuals. A fundamental idea behind TSA is that we have a time series object with one component, that being random variation or "white noise", that we cannot predict or replicate in our models. This component serves as irreducible error from a statistical learning perspective, as such the residuals (differences between the model and original series) should essentially be white noise if the model is "good". Basically, if all components present were accounted for, testing the residuals should produce the same diagnositcs as testing white noise. The following results show the output of the residuals testing and the conclusion wraps up the results of the tests.
+
+```{r, include = TRUE, echo = FALSE, fig.align= 'center', message = FALSE}
+
+# residuals testing
+par(mfrow = c(3,1))
+qqnorm(trip_data_model$residuals, frame = FALSE)
+qqnorm(trip_data_model$residuals, frame = FALSE)
+qqline(trip_data_model$residuals)
+pacf(trip_data_model$residuals, main = "Residuals: PACF Look",lag.max = 20)
+
+
+# standard function for residuals testing
+tsdiag(trip_data_model)
+
+
+# density check
+par(mfrow = c(1,2))
+hist(trip_data_model$residuals, main = str_to_title("residual histogram"),
+     xlab = "Spread")
+plot(density(trip_data_model$residuals), main = "Density Shape", frame = FALSE)
+
+```
+&nbsp;  
+
+## Conclusion  
+
+The Ljung_Box statistic p-values are above the alpha threshold indicating a failure to reject the null hypothesis that these residuals are independently distributed, essentially exhibiting no correlation. The density curve and histogram demonstrate the distribution of the residuals are roughly normal. The ACF maintains markers within the confidence region and the QQ plot of residuals vs. white noise confirms the notion they are of the same distribution as the scatter plot markers fall along the straight line. All of these results confirm the residuals are essentially white noise and the model is a good fit.  
+
+Because the model is very accurate (produced good predictions for 2018 ridership), and the residulas testing confirmed them to be white noise, it appears that TSA is a good approach for predicting NYC Taxi ridership in this scenario. Like with any forecasting method, the effectiveness can change given the conditions or circumstances occuring at that point in time. For example, had this analysis tried to predict ridership for 2013 (decreased from 2012) using data between 2009 and 2012 (increasing trend), I am confident the MAPE would be significantly higher and the forecasts would vary significantly from the test set.
+&nbsp;  
+&nbsp;  
+
+#### Disclosure
+
+This analysis makes no assertions as to the quality or permissable use of this data, and does not serve as any form of advice or procedure regarding lending. This analysis is purely a personal undertaking intended to gauge the forecasting effectiveness of an ARIMA model on data not typically analyzed as a time series object. 

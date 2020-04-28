@@ -8,14 +8,28 @@ output: rmarkdown::github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Notes
+## Description of Files
 ***
 &nbsp;\  
 
-#### tsa_main.rmd file converted to tsa_main.md to replace README as viewable output on github.  
+#### tsa_main.rmd  
+A markdown file with an output converted to ".md" for easy github compatibility and readability directly in the viewer.  
 
-#### tsa_main.rmd file can be run locally to produce a local html file.  
+#### tsa_main.md
+Viewable output of tsa_main.rmd file.
 
-#### Time series data is not provided in the repository.
+#### tsa_main_html.rmd  
+A markdown file with an output converted to ".html" for browser compatibility.
+
+#### tsa_main_html.html
+Browser compatible output of tsa_main_html file.
+
+#### tsa_main.r
+A script file containg just the code used in the tsa_main.rmd file.
+
+#### README.rmd
+A markdown file with an output converted to ".md" for easy github compatibility and readability directly in the viewer. This file just generates a README.md file for the repository.
+
+#### Note: Time series data is not provided in the repository.
 
 
