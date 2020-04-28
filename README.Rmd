@@ -22,10 +22,10 @@ Viewable output of tsa_main.rmd file.
 A markdown file with an output converted to ".html" for browser compatibility.
 
 #### tsa_main_html.html
-Browser compatible output of tsa_main_html file.
+Browser compatible output of tsa_main_html.rmd file.
 
 #### tsa_main.r
-A script file containg just the code used in the tsa_main.rmd file.
+A script file containg just the code used in the tsa_main.rmd files.
 
 #### README.rmd
 A markdown file with an output converted to ".md" for easy github compatibility and readability directly in the viewer. This file just generates a README.md file for the repository.
