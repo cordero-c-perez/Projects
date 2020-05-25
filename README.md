@@ -1,17 +1,36 @@
-Time Series Analysis Personal Project
+Time Series Analysis of NYC Taxicab Ridership
 ================
-C.Perez
+<center>
+
+C. Perez
+
+</center>
+
+ 
+
+## Project Description
+
+This analysis evaluates the effectiveness of a time series model in
+forecasting taxi ridership. Typically ridership data is not available in
+a time series format, however, the data that is available (individual
+trips per month) can be aggregated to cast as a time series object. This
+analysis does just that by taking monthly ridership data produced by the
+City ranging from 2010 through 2018, aggregating the number of trips by
+month, and storing this as a time series object in R. An exploratory
+analysis is conducted inclusive of appropriate decomposition to identify
+a suitable model (ARIMA in this case). The data is then split into
+training (2010-2017) and test(2018) sets, modeled on the training data,
+tested on the testing data, etc. The final result includes necessary
+error/residual testing and charts for comparison. The “tsa\_main.md”
+file is viewable directly in github to see the full analysis.  
+ 
 
 ## Description of Files
 
------
-
-  
-
 #### tsa\_main.rmd
 
-A markdown file with an output converted to “.md” for easy github
-compatibility and readability directly in the viewer.
+A markdown file with an output converted to “.md” for github viewer
+compatibility.
 
 #### tsa\_main.md
 
@@ -24,16 +43,15 @@ compatibility.
 
 #### tsa\_main\_html.html
 
-Browser compatible output of tsa\_main\_html file.
+Browser compatible output of tsa\_main\_html.rmd file.
 
 #### tsa\_main.r
 
-A script file containg just the code used in the tsa\_main.rmd file.
+A script file containing the code used in the “.rmd” files.
 
 #### README.rmd
 
-A markdown file with an output converted to “.md” for easy github
-compatibility and readability directly in the viewer. This file just
-generates a README.md file for the repository.
+This file creates a README.md file for the
+repository.
 
-#### Note: Time series data is not provided in the repository.
+###### Note: the data is not provided in the repository as it is large and publicly accessible.
