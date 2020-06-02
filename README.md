@@ -21,7 +21,7 @@ analysis is conducted inclusive of appropriate decomposition to identify
 a suitable model (ARIMA in this case). The data is then split into
 training (2010-2017) and test(2018) sets, modeled on the training data,
 tested on the testing data, etc. The final result includes necessary
-error/residual testing and charts for comparison. The “tsa\_main.md”
+error/residual testing and charts for comparison. The “tsa\_main.pdf”
 file is viewable directly in github to see the full analysis.  
  
 
