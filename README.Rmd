@@ -18,22 +18,16 @@ This analysis evaluates the effectiveness of a time series model in forecasting 
 ## Description of Files
 
 #### tsa_main.rmd  
-A markdown file with an output converted to ".md" for github viewer compatibility.
+A markdown file with an output converted to ".pdf" for github viewer compatibility.
 
-#### tsa_main.md
+#### tsa_main.pdf
 Viewable output of tsa_main.rmd file.
-
-#### tsa_main_html.rmd  
-A markdown file with an output converted to ".html" for browser compatibility.
-
-#### tsa_main_html.html
-Browser compatible output of tsa_main_html.rmd file.
 
 #### tsa_main.r
 A script file containing the code used in the ".rmd" files.
 
 #### README.rmd
-This file creates a README.md file for the repository.
+This file just creates a README.md file for the repository.
 
 ###### Note: the data is not provided in the repository as it is large and publicly accessible.
 

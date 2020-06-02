@@ -57,7 +57,7 @@ trip_data_model
 
 # create a forecast
 trip_data_forecast <- forecast(trip_data_model, level = c(95), h = 12)
-plot(trip_data_forecast, ylab = str_to_title("ridership"))
+plot(trip_data_forecast, ylab = str_to_title("ridership"), xlab = "Time")
 lines(tsdata_original)
 
 

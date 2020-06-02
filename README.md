@@ -29,21 +29,12 @@ file is viewable directly in github to see the full analysis.
 
 #### tsa\_main.rmd
 
-A markdown file with an output converted to “.md” for github viewer
+A markdown file with an output converted to “.pdf” for github viewer
 compatibility.
 
-#### tsa\_main.md
+#### tsa\_main.pdf
 
 Viewable output of tsa\_main.rmd file.
-
-#### tsa\_main\_html.rmd
-
-A markdown file with an output converted to “.html” for browser
-compatibility.
-
-#### tsa\_main\_html.html
-
-Browser compatible output of tsa\_main\_html.rmd file.
 
 #### tsa\_main.r
 
@@ -51,7 +42,6 @@ A script file containing the code used in the “.rmd” files.
 
 #### README.rmd
 
-This file creates a README.md file for the
-repository.
+This file just creates a README.md file for the repository.
 
 ###### Note: the data is not provided in the repository as it is large and publicly accessible.
