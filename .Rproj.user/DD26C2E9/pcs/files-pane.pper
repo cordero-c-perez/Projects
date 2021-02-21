@@ -1,9 +1,9 @@
 {
-    "path" : "~/Documents/R/RProjects/STA9701P2",
-    "sortOrder" : [
+    "path": "~/Documents/R/RProjects-Public/Time-Series-Analysis",
+    "sortOrder": [
         {
-            "ascending" : true,
-            "columnIndex" : 2
+            "columnIndex": 2,
+            "ascending": true
         }
     ]
 }

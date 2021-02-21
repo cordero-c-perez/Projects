@@ -156,7 +156,7 @@ tsdata
 
 The plot below shows ridership data, aggregated monthly from January 2010 through December 2017, plotted as a time series object. Data for 2018 has been set aside as the test set for evaluting the model. Traditionally, examining the ACF and PACF yields insight into the "best" parameters (p, d, q, etc.) for an ARIMA model; however, the R **auto.arima** function applies necessary techniques to achieve stationarity, if necessary, prior to finding appropriate parameters for the "best" model.  
 
-```{r, include = TRUE, echo = FALSE, fig.align= 'center'}
+```{r, include = TRUE, echo = FALSE, fig.align= 'center', fig.dim = c(8,4)}
 
 plot(tsdata, type = "l", main = str_to_title("time series plot of raw data"),
      xlab = str_to_title("monthly 2010:2017"), 
@@ -230,16 +230,14 @@ trip_data_model <- auto.arima(tsdata, trace = TRUE)
 trip_data_model
 
 ```
-&nbsp;
 &nbsp;  
-
 
 <center> **Model Testing** </center>
 &nbsp;  
 The following graphs show the predictions (forecasts) for the year 2018, and the model as it compares to the original time series, respectively. It is important to note that as time increases the fit and accuracy increases which is important for this analysis specifically as the concern here is accuracy in predicting future values. Should the time series plot hint at cycles (crudely, repeated values across larger gaps in time) then it might be best to secure a better fit for earlier values of the time series object.
 &nbsp;  
 
-```{r, include = TRUE, echo = FALSE, fig.align= 'center'}
+```{r, include = TRUE, echo = FALSE, fig.align= 'center', fig.dim = c(8,4)}
 
 # create a forecast
 trip_data_forecast <- forecast(trip_data_model, level = c(95), h = 12)
@@ -289,7 +287,18 @@ accuracy(trip_data_forecast, tsdata_original[109:120])
 
 The real confirmation on the quality of the model comes from tesing the residuals. A fundamental idea behind TSA is that we have a time series object with one component, that being random variation or "white noise", that we cannot predict or replicate in our models. This component serves as irreducible error from a statistical learning perspective, as such the residuals (differences between the model and original series) should essentially be white noise if the model is "good". Basically, if all components present were accounted for, testing the residuals should produce the same diagnositcs as testing white noise. The following results show the output of the residuals testing and the conclusion wraps up the results of the tests.
 
-```{r, include = TRUE, echo = FALSE, fig.align= 'center', message = FALSE}
+```{r, include = TRUE, echo = FALSE, fig.align= 'center', message = FALSE, fig.dim = c(8,6)}
+
+# standard function for residuals testing
+tsdiag(trip_data_model)
+```
+```{r, include = TRUE, echo = FALSE, fig.align= 'center', message = FALSE, fig.dim = c(8,4)}
+
+# density check
+par(mfrow = c(1,2))
+hist(trip_data_model$residuals, main = str_to_title("residual histogram"),
+     xlab = "Spread")
+plot(density(trip_data_model$residuals), main = "Density Shape", frame = FALSE)
 
 # residuals testing
 par(mfrow = c(3,1))
@@ -297,17 +306,6 @@ qqnorm(trip_data_model$residuals, frame = FALSE)
 qqnorm(trip_data_model$residuals, frame = FALSE)
 qqline(trip_data_model$residuals)
 pacf(trip_data_model$residuals, main = "Residuals: PACF Look",lag.max = 20)
-
-
-# standard function for residuals testing
-tsdiag(trip_data_model)
-
-
-# density check
-par(mfrow = c(1,2))
-hist(trip_data_model$residuals, main = str_to_title("residual histogram"),
-     xlab = "Spread")
-plot(density(trip_data_model$residuals), main = "Density Shape", frame = FALSE)
 
 ```
 &nbsp;  
