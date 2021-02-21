@@ -7,7 +7,7 @@ description and each folder has a report (either .pdf or .ipynb) that can be vie
 
 ## Folders
 
-#### [Time Series Analysis of NYC Taxicab Ridership]()
+#### [Time Series Analysis of NYC Taxicab Ridership](https://github.com/cordero-c-perez/Projects/tree/master/Time%20Series%20Analysis%20of%20NYC%20Taxicab%20Ridership)
 
 This analysis evaluates the effectiveness of a time series model in
 forecasting taxi ridership. Typically ridership data is not available in
@@ -20,6 +20,6 @@ analysis is conducted inclusive of appropriate decomposition to identify
 a suitable model (ARIMA in this case). The data is then split into
 training (2010-2017) and test (2018) sets, modeled on the training data,
 tested on the testing data, etc. The final result includes necessary
-error/residual testing and charts for comparison (“tsa_nyc_taxi_ridership.pdf”)
+error/residual testing and charts for comparison, available [here](https://github.com/cordero-c-perez/Projects/blob/master/Time%20Series%20Analysis%20of%20NYC%20Taxicab%20Ridership/tsa_nyc_taxi_ridership.pdf)
 
 
